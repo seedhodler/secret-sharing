@@ -39,7 +39,7 @@ def randint(min_value, max_value):
     # Rejection sampling: Keep picking random #s until one falls in the range
     while True:
         byte_from_entropy = get_entropy(numbytes_of_entropy)
-        int_from_entropy = int(byte_from_entropy.encode('hex'), 16)
+        int_from_entropy = int(byte_from_entropy.hex(), 16)
         if int_from_entropy <= acceptable_sample_range:
             break
     # Take the sampled int and extract an int that's within the provided bounds

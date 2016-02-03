@@ -12,7 +12,7 @@ import string
 def int_to_charset(x, charset):
     """ Turn a non-negative integer into a string.
     """
-    if not (isinstance(x, (int, long)) and x >= 0):
+    if not (isinstance(x, int) and x >= 0):
         raise ValueError("x must be a non-negative integer.")
     if x == 0:
         return charset[0]
