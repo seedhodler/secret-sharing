@@ -8,7 +8,7 @@ from setuptools import setup
 
 setup(
     name='secretsharing',
-    version='0.2.8',
+    version='0.2.9',
     url='https://github.com/rxl/secret-sharing',
     license='MIT',
     author='Halfmoon Labs',
@@ -19,6 +19,7 @@ setup(
     ],
     zip_safe=False,
     install_requires=[
+        'pycrypto'
     ],
     classifiers=[
         'Intended Audience :: Developers',
