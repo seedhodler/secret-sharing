@@ -42,8 +42,8 @@ def points_to_secret_int(points):
     for point in points:
         if not isinstance(point, tuple) and len(point) == 2:
             raise ValueError("Each point must be a tuple of two values.")
-        if not isinstance(point[0], (int, long)) and \
-            isinstance(point[1], (int, long)):
+        if not isinstance(point[0], int) and \
+            isinstance(point[1], int):
             raise ValueError("Each value in the point must be an int.")
     x_values, y_values = zip(*points)
     prime = get_large_enough_prime(y_values)
@@ -59,7 +59,7 @@ def point_to_share_string(point, charset):
     if '-' in charset:
         raise ValueError('The character "-" cannot be in the supplied charset.')
     if not isinstance(point, tuple) and len(point) == 2 and \
-        isinstance(point[0], (int, long)) and isinstance(point[1], (int, long)):
+        isinstance(point[0], int) and isinstance(point[1], int):
         raise ValueError('Point format is invalid. Must be a pair of integers.')
     x,y = point
     x_string = int_to_charset(x, charset)

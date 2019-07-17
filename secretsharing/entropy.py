@@ -8,19 +8,12 @@
 """
 
 import os
+import codecs
 from math import ceil
-
-def dev_random_entropy(numbytes):
-    return open("/dev/random", "rb").read(numbytes)
-
-def dev_urandom_entropy(numbytes):
-    return open("/dev/urandom", "rb").read(numbytes)
+from Crypto.Random import get_random_bytes
 
 def get_entropy(numbytes):
-    if os.name == 'nt':
-        return os.urandom(numbytes)
-    else:
-        return dev_random_entropy(numbytes)
+    return get_random_bytes(numbytes)
 
 def randint(min_value, max_value):
     """ Chooses a random integer between min_value and max_value, inclusive.
@@ -39,7 +32,7 @@ def randint(min_value, max_value):
     # Rejection sampling: Keep picking random #s until one falls in the range
     while True:
         byte_from_entropy = get_entropy(numbytes_of_entropy)
-        int_from_entropy = int(byte_from_entropy.encode('hex'), 16)
+        int_from_entropy = int(codecs.encode(byte_from_entropy, 'hex'), 16)
         if int_from_entropy <= acceptable_sample_range:
             break
     # Take the sampled int and extract an int that's within the provided bounds
