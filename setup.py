@@ -7,19 +7,22 @@ Secret Sharing
 from setuptools import setup
 
 setup(
-    name='secretsharing',
-    version='0.2.9',
-    url='https://github.com/rxl/secret-sharing',
+    name='bip39-secretsharing',
+    version='0.0.1',
+    url='https://github.com/seedhodler/secret-sharing',
     license='MIT',
-    author='Halfmoon Labs',
-    author_email='hello@halfmoon.io',
-    description="Tools for sharing secrets (like Bitcoin private keys), using shamir's secret sharing scheme.",
+    author='Seedhodler',
+    author_email='support@seedhodler.io',
+    description="Tools for generating bip39 mnemonics and sharing them using Shamir Secret Sharing. This tool is only for demo purposes",
     packages=[
         'secretsharing',
     ],
-    zip_safe=False,
+    zip_safe=True,
+    dependency_links=['https://github.com/trezor/python-mnemonic.git#egg-info=mnemonic-0.18'],
     install_requires=[
-        'pycrypto'
+        'pbkdf2',
+        'pycrypto',
+        'mnemonic==0.18'
     ],
     classifiers=[
         'Intended Audience :: Developers',
