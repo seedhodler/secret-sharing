@@ -7,7 +7,7 @@ Secret Sharing
 from setuptools import setup
 
 setup(
-    name='bip39-secretsharing',
+    name='secretsharing',
     version='0.0.1',
     url='https://github.com/seedhodler/secret-sharing',
     license='MIT',
@@ -20,8 +20,8 @@ setup(
     zip_safe=True,
     dependency_links=['https://github.com/trezor/python-mnemonic.git#egg-info=mnemonic-0.18'],
     install_requires=[
-        'pbkdf2',
-        'pycrypto',
+        'pbkdf2==1.3',
+        'pycrypto==2.6.1',
         'mnemonic==0.18'
     ],
     classifiers=[
