@@ -18,9 +18,10 @@ setup(
         'secretsharing',
     ],
     zip_safe=True,
-    dependency_links=['https://github.com/trezor/python-mnemonic.git#egg=mnemonic-0.18'],
+    dependency_links=['https://github.com/trezor/python-mnemonic.git#egg-info=mnemonic-0.18'],
     install_requires=[
-        'pycrypto'
+        'pbkdf2',
+        'pycrypto',
         'mnemonic==0.18'
     ],
     classifiers=[

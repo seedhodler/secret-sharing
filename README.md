@@ -1,102 +1,59 @@
-SecretSharing
-=============
+# bip39-secretsharing
 
-Tools for sharing secrets (like Bitcoin private keys), using shamir's secret sharing scheme.
+### Disclaimer
+> <emp>This project is a proof of concept and in *no way should EVER be used* for anything EVER. </emp>
 
-## Installation
+### About
 
-    >>> pip install secretsharing
+This project is a proof of concept for generating BIP39 Mnemonics and splitting them using Shamir Secret sharing. It aims to be a simple python command line utility. 
 
-## Sample Usage
+It sources code from:
+- https://github.com/trezor/python-mnemonic
+- https://github.com/blockstack/secret-sharing
 
-### Hex Secrets
 
-#### Splitting into shares
-    
-    >>> from secretsharing import SecretSharer
-    >>> shares = SecretSharer.split_secret("c4bbcb1fbec99d65bf59d85c8cb62ee2db963f0fe106f483d9afa73bd4e39a8a", 2, 3)
-    ['1-58cbd30524507e7a198bdfeb69c8d87fd7d2c10e8d5408851404f7d258cbcea7', '2-ecdbdaea89d75f8e73bde77a46db821cd40f430d39a11c864e5a4868dcb403ed', '3-80ebe2cfef5e40a2cdefef0923ee2bb9d04bc50be5ee308788af98ff609c380a']
+### Setup
+Requires python3 and pip
 
-#### Recovering from shares
+- `$ git clone https://github.com/seedhodler/secret-sharing.git`
+- Create new python virtual environment
+ - `$ python -m venv .venv`
+ - `$ source .venv/bin/activate`
+- Install module into python environment
+ - `$ python setup.py install`
+ 
+### Help
 
-    >>> SecretSharer.recover_secret(shares[0:2])
-    'c4bbcb1fbec99d65bf59d85c8cb62ee2db963f0fe106f483d9afa73bd4e39a8a'
+- `$ python -m secretsharing --help`
 
-### Plaintext Secrets
+```
+  -h, --help            show this help message and exit
+  -g GENERATE, --generate GENERATE
+  -m NUMBER_OF_SHARES, --number-of-shares NUMBER_OF_SHARES
+  -n SHARE_THRESHOLD, --share-threshold SHARE_THRESHOLD
+  -s {128,160,192,224,256}, --strength {128,160,192,224,256}
+  -l LANG, --lang LANG
+  -r RECOVER, --recover RECOVER
+  --shares SHARES [SHARES ...]
+```
 
-#### Splitting into shares
+### Usage
 
-    >>> from secretsharing import PlaintextToHexSecretSharer
-    >>> shares = PlaintextToHexSecretSharer.split_secret("correct horse battery staple", 2, 3)
-    ['1-7da6b11af146449675780434f6589230a3435d9ab59910354205996f508b8d0d', '2-fb4d6235e28c892cea70367c15ec3cbfed4cf4a417bd01e9812980f3ac97ddc8', '3-78f41350d3d2cdc35f6868c3357fe74f37568bad79e0f39dc04d687808a42d5a']
+Generate MNEMONIC:
+- `$ python -m secretsharing --generate=True --number-of-shares=3 --share-threshold=2 --strength=192 --lang=english`
 
-#### Recovering from shares
+```output
+MNEMONIC: method filter spray skate wink glass logic depend write page cup spray near silly remain unit giggle jealous
+SHARE-0: 1-78ca015d89f2b9fb6606f756af4015032b130d0b545cefc154402f8cbc1d929a77bfd47d874cb9aadbba5be183f07cb66ba8968a1fb4c3405148f0bf48beaf6e08bd4d0379ff6b3b152c90d83c693a3372d3a1a5cc95afd26e02125a0a9ac243290f19db27d3cab3a3d85c9f6cad51f123c89047dcfb7d753787ea8c357703be6c7457e765e5bbb42dfe252a67e508e2a2d029336a7a3218f398828205a2aeca
+SHARE-1: 2-719402bb13e573f6cc0deead5e802a0656261a16a8b9df82a8805f19783b2534ef7fa8fb0e997355b774b7c307e0f96cd7512d143f698680a291e17e917d5edc117a9a06f3fecc2f2eefc77d8643f872f07d60bd2f5523a877b26b6f28eeb839d3d7b706034658a15a68566a5cde00a529e03a84355243f23afb028b91eeb684f12a727d8965537230c4b0ab6ee0580a40f3a4373c3be7f89e19f05c81da4701
+SHARE-2: 3-6a5e04189dd82df23214e6040dc03f0981392721fd16cf43fcc08ea63458b7cf673f7d7895e62d00932f13a48bd1762342f9c39e5f1e49c0f3dad23dda3c0e4a1a37e70a6dfe2d2348b2fe22d01eb6b26e271fd49214977e8162c4844742ae307ea05430deb8e68f10f850354d0eaf592ff7e4c08da90a6f3e6e1a8aee66694b75e08d13ace4eb30338b3c2c75dba731df171f3b0dfd9dd8489b5e36fe11df38
+```
 
-    >>> PlaintextToHexSecretSharer.recover_secret(shares[0:2])
-    'correct horse battery staple'
+Recover MNEMONIC:
+- `$ python -m secretsharing --recover=True --shares "2-719402bb13e573f6cc0deead5e802a0656261a16a8b9df82a8805f19783b2534ef7fa8fb0e997355b774b7c307e0f96cd7512d143f698680a291e17e917d5edc117a9a06f3fecc2f2eefc77d8643f872f07d60bd2f5523a877b26b6f28eeb839d3d7b706034658a15a68566a5cde00a529e03a84355243f23afb028b91eeb684f12a727d8965537230c4b0ab6ee0580a40f3a4373c3be7f89e19f05c81da4701" "3-6a5e04189dd82df23214e6040dc03f0981392721fd16cf43fcc08ea63458b7cf673f7d7895e62d00932f13a48bd1762342f9c39e5f1e49c0f3dad23dda3c0e4a1a37e70a6dfe2d2348b2fe22d01eb6b26e271fd49214977e8162c4844742ae307ea05430deb8e68f10f850354d0eaf592ff7e4c08da90a6f3e6e1a8aee66694b75e08d13ace4eb30338b3c2c75dba731df171f3b0dfd9dd8489b5e36fe11df38"`
 
-### Bitcoin Private Keys
-
-Note: Bitcoin private keys are in [Base58 check](https://en.bitcoin.it/wiki/Base58Check_encoding) format.
-
-#### Splitting into reliably printable base58 shares
-
-    >>> from secretsharing import BitcoinToB58SecretSharer
-    >>> shares = BitcoinToB58SecretSharer.split_secret("5KJvsngHeMpm884wtkJNzQGaCErckhHJBGFsvd3VyK5qMZXj3hS", 2, 3)
-    ['2-Bqni1ysZcXhFBhVVJLQgPimDUJrjBrzuvBmc6gPNPh1jyDcvM6uYUuH', '3-9xpMBerBCdHLKzCQ82fjVLfZ3Qt48sqa6nz1E3cc6eu3qUe58vaogU3', '4-85qzMKpnnisRUGuJwivnaxZtcWuP5tgEHQCQMQqqocnMhjfDvkG4t2o']
-
-#### Recovering from base58 shares
-
-    >>> BitcoinToB58SecretSharer.recover_secret(shares[0:2])
-    '5KJvsngHeMpm884wtkJNzQGaCErckhHJBGFsvd3VyK5qMZXj3hS'
-
-#### Splitting into reliably transcribable [base32](http://en.wikipedia.org/wiki/Base32) shares
-
-    >>> from secretsharing import BitcoinToB32SecretSharer
-    >>> shares = BitcoinToB32SecretSharer.split_secret("5KJvsngHeMpm884wtkJNzQGaCErckhHJBGFsvd3VyK5qMZXj3hS", 2, 3)
-    ['B-RJ6Y56OSUWDY5VAAGC6XLSTM64CAJ2LPBNB7NKATJCWC7VSHIP5DQIVMR6OGJ4GB', 'C-CT5R24XAR5B732JWYQKSYOYBSF5VHI73HLY24QCFRJR5XUW64C4JWYN6SRGWVCUG', 'D-T54KX27OPEAGZ7TNK5WOFK4WFPZKEXUHNKPWLWDXZQNYPT3WPV3P5IGQTD7HAJDG']
-
-#### Recovering from base32 shares
-
-    >>> BitcoinToB32SecretSharer.recover_secret(shares[0:2])
-    '5KJvsngHeMpm884wtkJNzQGaCErckhHJBGFsvd3VyK5qMZXj3hS'  
-
-#### Splitting into reliably transcribable [zbase32](http://philzimmermann.com/docs/human-oriented-base-32-encoding.txt) shares
-
-    >>> from secretsharing import BitcoinToZB32SecretSharer
-    >>> shares = BitcoinToZB32SecretSharer.split_secret("5KJvsngHeMpm884wtkJNzQGaCErckhHJBGFsvd3VyK5qMZXj3hS", 2, 3)
-    ['b-aweuzkm9jmfgd7x4k595bzcm3er3epf4dprfwzpprqa3exbuocs9byn4owfuqbo', 'n-btetgqqu8doacarsbyfdzpyycyj6gfdeaaxrpfx33pdjk4ou1d5owjdmdi1iegm9', 'd-njh33f14q7smucmh8iq8uaewc8mzub3mzptrwsegfiz3hc1fozkkjtguc4trh6sq']
-
-#### Recovering from zbase32 shares
-
-    >>> BitcoinToZB32SecretSharer.recover_secret(shares[0:2])
-    '5KJvsngHeMpm884wtkJNzQGaCErckhHJBGFsvd3VyK5qMZXj3hS'    
-
-### Raw integers
-
-#### Splitting into shares
-
-    >>> from secretsharing import secret_int_to_points, points_to_secret_int
-    >>> secret = 88985120633792790105905686761572077713049967498756747774697023364147812997770L
-    >>> shares = secret_int_to_points(secret, 2, 3)
-    [(1, 108834987130598118322155382953070549297972563210322923466700361825476188819879L), (2, 12892764390087251114834094135881113029625174256248535119246116278891435001755L), (3, 32742630886892579331083790327379584614547769967814710811249454740219810823864L)]
-
-#### Recovering from shares
-
-    >>> points_to_secret_int(shares[0:2])
-    88985120633792790105905686761572077713049967498756747774697023364147812997770L
-
-### Custom formats
-
-#### Splitting into shares
-
-    >>> from secretsharing import SecretSharer, base64_chars
-    >>> sharer_class = SecretSharer
-    >>> sharer_class.share_charset = base64_chars
-    >>> shares = sharer_class.split_secret("c4bbcb1fbec99d65bf59d85c8cb62ee2db963f0fe106f483d9afa73bd4e39a8a", 2, 3)
-    ['B-JpxCTUQ9D+q93JglQM9yRinI2Cyxe92FTBSYa93ppfY', 'C-HAmR0pjHuHwL4rozXnFY05ysIJVqtf3pob1HCMaaZUm', 'D-EXbhV+1SYQ1Z6NxBfBM/YQ+PaP4j8B5N92X1pa9LJJ0']
-
-#### Recovering from shares
-
-    >>> sharer_class.recover_secret(shares[0:2])
-    'c4bbcb1fbec99d65bf59d85c8cb62ee2db963f0fe106f483d9afa73bd4e39a8a'
+```output
+SHARE-0: 2-719402bb13e573f6cc0deead5e802a0656261a16a8b9df82a8805f19783b2534ef7fa8fb0e997355b774b7c307e0f96cd7512d143f698680a291e17e917d5edc117a9a06f3fecc2f2eefc77d8643f872f07d60bd2f5523a877b26b6f28eeb839d3d7b706034658a15a68566a5cde00a529e03a84355243f23afb028b91eeb684f12a727d8965537230c4b0ab6ee0580a40f3a4373c3be7f89e19f05c81da4701
+SHARE-1: 3-6a5e04189dd82df23214e6040dc03f0981392721fd16cf43fcc08ea63458b7cf673f7d7895e62d00932f13a48bd1762342f9c39e5f1e49c0f3dad23dda3c0e4a1a37e70a6dfe2d2348b2fe22d01eb6b26e271fd49214977e8162c4844742ae307ea05430deb8e68f10f850354d0eaf592ff7e4c08da90a6f3e6e1a8aee66694b75e08d13ace4eb30338b3c2c75dba731df171f3b0dfd9dd8489b5e36fe11df38
+MNEMONIC: method filter spray skate wink glass logic depend write page cup spray near silly remain unit giggle jealous
+```
